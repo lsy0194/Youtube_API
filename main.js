@@ -10,8 +10,18 @@ const desc_len = 180;
 //일정 글자수 이상일때 글자짜르고 말줄임표 붙이기
 //문자열.substr(시작위치,자를 글자수)
 
-//특정 구분자를 기점으로 문자를 잘라서 배열로 빈환하기
-//문자의 특정 기호나 문자값을 일괄적을 변경하고 싶을때
+//특정 구분자를 기점으로 문자를 잘라서 배열로 반환하기
+//문자에서 특정 기호나 문자값을 일괄적으로 변경하고 싶을때
+
+//beef-lettuce-tomato --> Beef Lettuce Tomato
+let text = 'beef-lettuce-tomat';
+text = text
+	.split('-')
+	.map((el) => {
+		return el.charAt(0).toUpperCase() + el.slice(1);
+	})
+	.join(' ');
+console.log(text);
 
 fetch(resulturl)
 	.then((data) => data.json())
@@ -23,9 +33,11 @@ fetch(resulturl)
 		json.items.map((data) => {
 			let desc = data.snippet.description;
 			desc.length > desc_len ? (desc = desc.substr(0, desc_len) + '...') : desc;
+
 			//날짜값 가공
 			let date = data.snippet.publishedAt.split('T')[0];
 			date = date.split('-').join('.');
+
 			tags += `
         <article>
           <h2>${
