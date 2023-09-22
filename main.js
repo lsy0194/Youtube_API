@@ -14,7 +14,7 @@ window.addEventListener('click', (e) => {
 	//e.currentTarget : 이벤트가 연결이 되어있는 선택자를 반환
 	//e.target : 실제화면상에서 이벤트가 발생한 요소를 반환
 
-	if (e.target.nodeName === 'IMG') createPop();
+	if (e.target.nodeName === 'IMG') createPop(e.target.getAttribute('data-vid'));
 	if (e.target.className === 'close') removePop();
 });
 
@@ -45,7 +45,9 @@ fetch(resulturl)
             <span>${date}</span>
           </div>
           <div class="pic">
-            <img src="${data.snippet.thumbnails.standard.url}">
+            <img src="${data.snippet.thumbnails.standard.url}" data-vid=${
+				data.snippet.resourceId.videoId
+			}/>
           </div>
         </article>
       `;
@@ -53,16 +55,20 @@ fetch(resulturl)
 		frame.innerHTML = tags;
 	});
 
-function createPop() {
+function createPop(id) {
 	const aside = document.createElement('aside');
 	aside.innerHTML = `
-  <div class="con"></div>
+  <div class="con">
+  <iframe src="https://www.youtube.com/embed/${id}"></iframe>
+  </div>
   <span class="close">close</span>
   `;
 	document.body.append(aside);
+	document.body.style.overflow = 'hidden';
 }
 
 function removePop() {
 	const pop = document.querySelector('aside');
 	pop.remove();
+	document.body.style.overflow = 'auto';
 }
